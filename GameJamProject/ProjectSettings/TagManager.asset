@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Room
   - UI
+  - Success
+  - Box
   layers:
   - Default
   - TransparentFX

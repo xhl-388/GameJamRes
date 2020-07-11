@@ -7,9 +7,11 @@ public class TimeController : MonoBehaviour
     public static TimeController instance { private set; get; }
     public int realTime { private set; get; }
     private int time=0;
-    private const float fearPerHour=0.5f;
     public int currentCostTime;
+    public int leftBeFoundTime;
+    [HideInInspector]
     public bool[][] isDayTimeData = new bool[8][];
+    [HideInInspector]
     public bool[] isDayTime = new bool[6];
     private void Awake()
     {
@@ -25,7 +27,19 @@ public class TimeController : MonoBehaviour
     {
         time = (time + x) % 24;
         currentCostTime += x;
-        FearController.instance.AddFear(fearPerHour * x);
+        if (currentCostTime >= 4)
+        {
+            Player.instance.isFound = true;
+            leftBeFoundTime = 3;
+        }
+        else if(leftBeFoundTime!=0)
+        {
+            leftBeFoundTime--;
+            if (leftBeFoundTime == 0)
+            {
+                Player.instance.isFound = false;
+            }
+        }
     }
     public void SyTime()
     {

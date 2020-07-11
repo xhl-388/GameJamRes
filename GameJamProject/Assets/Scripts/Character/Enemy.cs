@@ -9,6 +9,7 @@ public class Enemy : MonoBehaviour
     private void Awake()
     {
         instance = this;
+        index = 5;
     }
     public void Act()
     {

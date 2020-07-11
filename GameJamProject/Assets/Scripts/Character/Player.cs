@@ -16,7 +16,7 @@ public class Player : MonoBehaviour
     private LayerMask moveableLayer;
     private GameObject UI_Gameplay;
     private GameObject UI_Choose;
-    public bool isFound { private set; get; }
+    public bool isFound;
     private void Awake()
     {
         instance = this;
@@ -36,6 +36,13 @@ public class Player : MonoBehaviour
                 Collider2D collider = Physics2D.OverlapCircle(Camera.main.ScreenToWorldPoint(Input.mousePosition), 0.1f, collectableLayer);
                 if (collider)
                 {
+                    if (ItemController.instance.numberOfPaper==3&& collider.CompareTag("Success"))
+                    {
+                        if (TimeController.instance.realTime >= GameController.instance.time * 3 && TimeController.instance.realTime < GameController.instance.time * 3 + 3)
+                        {
+                            GameController.instance.Succeed();
+                        }
+                    }
                     collider.GetComponent<CollectableItem>().BeCollected();
                     TimeController.instance.CostTime(1);
                     FearController.instance.AddFear(2);
@@ -86,6 +93,13 @@ public class Player : MonoBehaviour
     }
     public void Rest()
     {
+        if (ItemController.instance.numberOfPaper == 3)
+        {
+            if (GameController.instance.placeIndex == MapController.instance.currentIndexX && TimeController.instance.realTime < GameController.instance.time*3+3&&TimeController.instance.realTime>=GameController.instance.time*3&&GameController.instance.way==1)
+            {
+                GameController.instance.Succeed();
+            }
+        }
         FearController.instance.ReduceFear(5);
         TimeController.instance.CostTime(1);
         Enemy.instance.Act();
