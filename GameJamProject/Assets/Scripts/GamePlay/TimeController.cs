@@ -27,7 +27,7 @@ public class TimeController : MonoBehaviour
     {
         time = (time + x) % 24;
         currentCostTime += x;
-        if (currentCostTime >= 3)
+        if (currentCostTime >= 4)
         {
             Player.instance.isFound = true;
             leftBeFoundTime = 3;
@@ -48,6 +48,7 @@ public class TimeController : MonoBehaviour
         if (realTime == 0)
         {
             UseInterfaceAudio.instance.PlayOneShot(UseInterfaceAudio.instance.clock);
+            TalkController.instance.ShowText("你听到不知从何处传来的钟声");
         }
     }
     private void InitDayTimeData()

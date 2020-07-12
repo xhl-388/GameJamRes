@@ -6,11 +6,13 @@ public class Enemy : MonoBehaviour
 {
     public static Enemy instance { private set; get; }
     public int index { private set; get; }
+    private int indexDir;
     private bool cantMove = false;
     private void Awake()
     {
         instance = this;
         index = 5;
+        indexDir = 1;
     }
     public void Act()
     {
@@ -34,18 +36,18 @@ public class Enemy : MonoBehaviour
                 }
                 else
                 {
-                    bool flag = false;
+                    List<int> list = new List<int>();
                     for (int i = 0; i < 6; i++)
                     {
                         if (i != index && i != MapController.instance.currentIndexX && !TimeController.instance.isDayTimeData[time/3][i]&& !TimeController.instance.isDayTimeData[(time / 3+1)%8][i])
                         {
-                            Move(i);
-                            flag = true;
-                            break;
+                            list.Add(i);
                         }
                     }
-                    if (!flag)
-                        Move(index);
+                    if (list.Count != 0)
+                    {
+                        Move(list[Random.Range(0, list.Count)]);
+                    }
                 }
             }
             else
@@ -55,45 +57,51 @@ public class Enemy : MonoBehaviour
         }
         else
         {
-            bool flag = false;
+            List<int> list = new List<int>();
             for(int i = 0; i < 6; i++)
             {
                 if(i!=index&&GameController.instance.IsNear(i,index)&& !TimeController.instance.isDayTimeData[time / 3][i]&& !TimeController.instance.isDayTimeData[(time / 3 + 1) % 8][i])
                 {
-                    Move(i);
-                    flag = true;
-                    break;
+                    list.Add(i);
                 }
             }
-            if (!flag)
+            if (list.Count != 0)
             {
-                Move(index);
+                Move(list[Random.Range(0, list.Count)]);
             }
         }
         if (index == MapController.instance.currentIndexX)
         {
-            if (ItemController.instance.numberOfProtect > 0)
+            if (indexDir == MapController.instance.currentIndexY)
             {
-                ItemController.instance.CostProtect();
-                List<int> list = new List<int>();
-                for(int i = 0; i < 6; i++)
+                if (ItemController.instance.numberOfProtect > 0)
                 {
-                    if (i != index && GameController.instance.IsNear(i, index))
+                    ItemController.instance.CostProtect();
+                    List<int> list = new List<int>();
+                    for (int i = 0; i < 6; i++)
                     {
-                        list.Add(i);
+                        if (i != index && GameController.instance.IsNear(i, index))
+                        {
+                            list.Add(i);
+                        }
                     }
+                    MapController.instance.ChangeRoom(list[Random.Range(0, list.Count)], Random.Range(0, 4));
+                    cantMove = true;
                 }
-                MapController.instance.ChangeRoom(list[Random.Range(0, list.Count)], Random.Range(0, 4));
-                cantMove = true;
+                else
+                {
+                    GameController.instance.FailByCaught();
+                }
             }
             else
             {
-                GameController.instance.FailByCaught();
+                TalkController.instance.ShowText("他要来了，快跑！");
             }
         }
     }
     public void Move(int x)
     {
         index = x;
+        indexDir = Random.Range(0, 4);
     }
 }
