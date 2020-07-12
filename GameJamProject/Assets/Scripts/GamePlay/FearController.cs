@@ -8,11 +8,15 @@ public class FearController : MonoBehaviour
     public static FearController instance { private set; get; }
     private float fear=2;
     private const float maxFear=10;
-    private GameObject text;
+    private GameObject slider;
     private void Awake()
     {
         instance = this;
-        text = GameObject.FindWithTag("UI").transform.GetChild(2).GetChild(4).GetChild(0).gameObject;
+        slider = GameObject.FindWithTag("UI").transform.GetChild(2).GetChild(8).gameObject;
+    }
+    private void Start()
+    {
+        slider.GetComponent<Slider>().value = fear / 10;
     }
     public void AddFear(float add)
     {
@@ -21,11 +25,11 @@ public class FearController : MonoBehaviour
         {
             GameController.instance.FailByFear(); 
         }
-        text.GetComponent<Text>().text = fear.ToString();
+        slider.GetComponent<Slider>().value = fear / 10;
     }
     public void ReduceFear(float reduce)
     {
         fear = Mathf.Clamp(fear - reduce, 0, fear);
-        text.GetComponent<Text>().text = fear.ToString();
+        slider.GetComponent<Slider>().value = fear / 10;
     }
 }

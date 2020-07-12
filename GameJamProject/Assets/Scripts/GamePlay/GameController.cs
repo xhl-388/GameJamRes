@@ -30,7 +30,7 @@ public class GameController : MonoBehaviour
     {
         if (way == 0)
         {
-            Collider2D[] colliders = Physics2D.OverlapBoxAll(MapController.instance.maps[placeIndex][Random.Range(0, 4)].transform.position, new Vector2(12, 12), 0, collectableLayer);
+            Collider2D[] colliders = Physics2D.OverlapBoxAll(MapController.instance.bigMap[placeIndex].transform.position, new Vector2(40, 40), 0, collectableLayer);
             List<GameObject> obj = new List<GameObject>();
             for(int i = 0; i < colliders.Length; i++)
             {
@@ -44,15 +44,25 @@ public class GameController : MonoBehaviour
     }
     public void FailByFear()
     {
-        Debug.Log("You are too afraid");
+        TalkController.instance.ShowText("你恐惧着咆哮，腐烂了");
+        Time.timeScale = 0;
     }
     public void FailByCaught()
     {
-        Debug.Log("You are caught");
+        TalkController.instance.ShowText("你被抓住了，成为了食物");
+        Time.timeScale = 0;
     }
     public void Succeed()
     {
-        Debug.Log("Succeed");
+        if (way == 0)
+        {
+            TalkController.instance.ShowText("箱子里发出了光，你钻了进去");
+        }
+        else
+        {
+            TalkController.instance.ShowText("你安心地睡了，逃离了黑暗");
+        }
+        Time.timeScale = 0;
     }
     public bool IsNear(int x,int y)
     {

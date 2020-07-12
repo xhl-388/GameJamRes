@@ -46,6 +46,6 @@ public class Crystal : CollectableItem
         {
 
         }
-        Destroy(this.gameObject);
+        Destroy(transform.parent.gameObject);
     }
 }

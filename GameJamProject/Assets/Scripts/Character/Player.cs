@@ -60,6 +60,7 @@ public class Player : MonoBehaviour
                 Collider2D collider = Physics2D.OverlapCircle(Camera.main.ScreenToWorldPoint(Input.mousePosition), 0.1f, moveableLayer);
                 if (collider)
                 {
+                    TalkController.instance.ShowText("你面向" + GetDir(collider.transform.position - MapController.instance.maps[MapController.instance.currentIndexX][MapController.instance.currentIndexY].transform.position) + "，穿过正对着的门");
                     Door door = collider.GetComponent<Door>();
                     MapController.instance.ChangeRoom(door.indexX, door.indexY);
                     TimeController.instance.CostTime(1);
@@ -69,7 +70,6 @@ public class Player : MonoBehaviour
                     UI_Gameplay.SetActive(true);
                     Enemy.instance.Act();
                     TimeController.instance.SyTime();
-                    TalkController.instance.ShowText("你冲了出去，陷入另一个噩梦");
                 }
             }
         }
@@ -108,5 +108,24 @@ public class Player : MonoBehaviour
         TimeController.instance.CostTime(1);
         Enemy.instance.Act();
         TimeController.instance.SyTime();
+    }
+    private string GetDir(Vector2 vec)
+    {
+        if (Mathf.Abs(vec.x) < 0.1)
+        {
+            if (vec.y > 0)
+            {
+                return "上方";
+            }
+            else return "下方";
+        }
+        else
+        {
+            if (vec.x > 0)
+            {
+                return "右侧";
+            }
+            else return "左侧";
+        }
     }
 }

@@ -7,6 +7,7 @@ public class MapController : MonoBehaviour
 {
     public static MapController instance { private set; get; }
     public GameObject[][] maps = new GameObject[6][];
+    public GameObject[] bigMap = new GameObject[6];
     public int currentIndexX { private set; get; }
     public int currentIndexY { private set; get; }
     private void Awake()
@@ -14,6 +15,7 @@ public class MapController : MonoBehaviour
         instance = this;
         currentIndexX = currentIndexY = 0;
         GameObject[] obj=GameObject.FindGameObjectsWithTag("Room").OrderBy(g => g.transform.GetSiblingIndex()).ToArray();
+        bigMap = obj;
         for(int i = 0; i < obj.Length; i++)
         {
             maps[i] = new GameObject[4];
