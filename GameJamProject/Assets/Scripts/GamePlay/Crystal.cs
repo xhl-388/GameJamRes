@@ -41,11 +41,11 @@ public class Crystal : CollectableItem
                 }
             }
             ItemController.instance.CostHarmer();
+            Destroy(transform.parent.gameObject);
         }
         else
         {
-
+            TalkController.instance.ShowText("你或许需要一把锤子来搞定它");
         }
-        Destroy(transform.parent.gameObject);
     }
 }

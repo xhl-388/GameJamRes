@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -16,6 +17,9 @@ public class Player : MonoBehaviour
     private LayerMask moveableLayer;
     private GameObject UI_Gameplay;
     private GameObject UI_Choose;
+    public GameObject UI_GameOver;
+    public GameObject UI_Succeed;
+    private GameObject UI_Start;
     public bool isFound;
     private void Awake()
     {
@@ -25,7 +29,16 @@ public class Player : MonoBehaviour
         GameObject ui = GameObject.FindWithTag("UI");
         UI_Gameplay = ui.transform.GetChild(0).gameObject;
         UI_Choose = ui.transform.GetChild(1).gameObject;
+        UI_GameOver = ui.transform.GetChild(3).gameObject;
+        UI_Succeed = ui.transform.GetChild(4).gameObject;
+        UI_Start = ui.transform.GetChild(5).gameObject;
         UI_Choose.SetActive(false);
+        UI_GameOver.SetActive(false);
+        UI_Succeed.SetActive(false);
+    }
+    private void Start()
+    {
+        StartCoroutine(GetStarted());
     }
     private void Update()
     {
@@ -45,7 +58,7 @@ public class Player : MonoBehaviour
                     }
                     collider.GetComponent<CollectableItem>().BeCollected();
                     TimeController.instance.CostTime(1);
-                    FearController.instance.AddFear(2);
+                    FearController.instance.AddFear(1);
                     UI_Choose.SetActive(false);
                     UI_Gameplay.SetActive(true);
                     mode = Mode.none;
@@ -104,7 +117,7 @@ public class Player : MonoBehaviour
                 GameController.instance.Succeed();
             }
         }
-        FearController.instance.ReduceFear(2);
+        FearController.instance.ReduceFear(3);
         TimeController.instance.CostTime(1);
         Enemy.instance.Act();
         TimeController.instance.SyTime();
@@ -127,5 +140,22 @@ public class Player : MonoBehaviour
             }
             else return "左侧";
         }
+    }
+    IEnumerator GetStarted()
+    {
+        Text text1 = UI_Start.transform.GetChild(1).gameObject.GetComponent<Text>();
+        Text text2= UI_Start.transform.GetChild(2).gameObject.GetComponent<Text>();
+        for (int i = 0; i < 2 / Time.deltaTime; i++)
+        {
+            text1.color = new Color(1, 1, 1, text1.color.a + Time.deltaTime * 0.5f);
+            yield return new WaitForSeconds(Time.deltaTime);
+        }
+        for (int i = 0; i < 3 / Time.deltaTime; i++)
+        {
+            text2.color = new Color(1, 1, 1, text2.color.a + Time.deltaTime * 0.33f);
+            yield return new WaitForSeconds(Time.deltaTime);
+        }
+        yield return new WaitForSeconds(2f);
+        UI_Start.SetActive(false);
     }
 }

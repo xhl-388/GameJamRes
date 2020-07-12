@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -45,12 +46,12 @@ public class GameController : MonoBehaviour
     public void FailByFear()
     {
         TalkController.instance.ShowText("你恐惧着咆哮，腐烂了");
-        Time.timeScale = 0;
+        StartCoroutine(Failed());
     }
     public void FailByCaught()
     {
         TalkController.instance.ShowText("你被抓住了，成为了食物");
-        Time.timeScale = 0;
+        StartCoroutine(Failed());
     }
     public void Succeed()
     {
@@ -62,7 +63,11 @@ public class GameController : MonoBehaviour
         {
             TalkController.instance.ShowText("你安心地睡了，逃离了黑暗");
         }
-        Time.timeScale = 0;
+        StartCoroutine(Win());
+    }
+    public void Restart()
+    {
+        SceneManager.LoadScene(0);
     }
     public bool IsNear(int x,int y)
     {
@@ -73,5 +78,15 @@ public class GameController : MonoBehaviour
             return false;
         }
         else return true;
+    }
+    IEnumerator Failed()
+    {
+        yield return new WaitForSeconds(0.5f);
+        Player.instance.UI_GameOver.SetActive(true);
+    }
+    IEnumerator Win()
+    {
+        yield return new WaitForSeconds(0.5f);
+        Player.instance.UI_Succeed.SetActive(true);
     }
 }

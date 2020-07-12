@@ -23,7 +23,7 @@ public class ItemController : MonoBehaviour
     }
     public void FindFood()
     {
-        FearController.instance.ReduceFear(Random.Range(2, 5));
+        FearController.instance.ReduceFear(2);
         TalkController.instance.ShowText("你找到食物，狼吞虎咽");
         Debug.Log("FindFood");
     }
