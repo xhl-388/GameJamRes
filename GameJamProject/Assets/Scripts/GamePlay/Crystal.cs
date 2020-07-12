@@ -8,6 +8,7 @@ public class Crystal : CollectableItem
     {
         if (ItemController.instance.numberOfHarmer != 0)
         {
+            UseInterfaceAudio.instance.PlayOneShot(UseInterfaceAudio.instance.glass);
             int x = Random.Range(0, 2);
             if (x == 0)
             {
@@ -45,5 +46,6 @@ public class Crystal : CollectableItem
         {
 
         }
+        Destroy(this.gameObject);
     }
 }

@@ -6,6 +6,7 @@ public class Box :CollectableItem
 {
     public override void BeCollected()
     {
+        UseInterfaceAudio.instance.PlayOneShot(UseInterfaceAudio.instance.openBox);
         int x=Random.Range(0, 11);
         if (x < 8)
         {

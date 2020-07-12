@@ -63,12 +63,13 @@ public class Player : MonoBehaviour
                     Door door = collider.GetComponent<Door>();
                     MapController.instance.ChangeRoom(door.indexX, door.indexY);
                     TimeController.instance.CostTime(1);
-                    FearController.instance.AddFear(2);
+                    FearController.instance.AddFear(1);
                     mode = Mode.none;
                     UI_Choose.SetActive(false);
                     UI_Gameplay.SetActive(true);
                     Enemy.instance.Act();
                     TimeController.instance.SyTime();
+                    TalkController.instance.ShowText("你冲了出去，陷入另一个噩梦");
                 }
             }
         }
@@ -84,15 +85,18 @@ public class Player : MonoBehaviour
         UI_Choose.SetActive(true);
         UI_Gameplay.SetActive(false);
         mode = Mode.move;
+
     }
     public void Back()
     {
         UI_Choose.SetActive(false);
         UI_Gameplay.SetActive(true);
         mode = Mode.none;
+        TalkController.instance.ShowText("犹豫，空洞的灵魂");
     }
     public void Rest()
     {
+        TalkController.instance.ShowText("你睡了一觉，忘记了恐惧");
         if (ItemController.instance.numberOfPaper == 3)
         {
             if (GameController.instance.placeIndex == MapController.instance.currentIndexX && TimeController.instance.realTime < GameController.instance.time*3+3&&TimeController.instance.realTime>=GameController.instance.time*3&&GameController.instance.way==1)
@@ -100,7 +104,7 @@ public class Player : MonoBehaviour
                 GameController.instance.Succeed();
             }
         }
-        FearController.instance.ReduceFear(5);
+        FearController.instance.ReduceFear(2);
         TimeController.instance.CostTime(1);
         Enemy.instance.Act();
         TimeController.instance.SyTime();

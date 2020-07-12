@@ -6,6 +6,7 @@ public class Enemy : MonoBehaviour
 {
     public static Enemy instance { private set; get; }
     public int index { private set; get; }
+    private bool cantMove = false;
     private void Awake()
     {
         instance = this;
@@ -13,10 +14,15 @@ public class Enemy : MonoBehaviour
     }
     public void Act()
     {
+        if (cantMove)
+        {
+            cantMove = false;
+            return;
+        }
         int time = TimeController.instance.realTime;
         if (TimeController.instance.isDayTimeData[(time / 3 + 1) % 8][index] || TimeController.instance.isDayTimeData[(time / 3 + 1) % 8][index])
         {
-            Move(Random.Range(5, 7));
+            Move(Random.Range(4, 6));
         }
         else if (Player.instance.isFound)
         {
@@ -62,6 +68,27 @@ public class Enemy : MonoBehaviour
             if (!flag)
             {
                 Move(index);
+            }
+        }
+        if (index == MapController.instance.currentIndexX)
+        {
+            if (ItemController.instance.numberOfProtect > 0)
+            {
+                ItemController.instance.CostProtect();
+                List<int> list = new List<int>();
+                for(int i = 0; i < 6; i++)
+                {
+                    if (i != index && GameController.instance.IsNear(i, index))
+                    {
+                        list.Add(i);
+                    }
+                }
+                MapController.instance.ChangeRoom(list[Random.Range(0, list.Count)], Random.Range(0, 4));
+                cantMove = true;
+            }
+            else
+            {
+                GameController.instance.FailByCaught();
             }
         }
     }
